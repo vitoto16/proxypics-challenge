@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  server:
+    container_name: proxypics_challenge_development_server
+    build:
+      context: ./server
+    restart: unless-stopped
+    entrypoint: /app/entrypoint.sh
+    volumes:
+      - ./server:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  nginx:
+    container_name: proxypics_challenge_development_nginx
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./infrastructure/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - server
+  db:
+    container_name: proxypics_challenge_development_db
+    image: postgres:12.10-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: proxypics_challenge_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: proxypics123
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
