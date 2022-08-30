@@ -1,8 +1,20 @@
 version: '3'
 
+x-db-env: &db-env
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: proxypics123
+
+x-db-base: &db-base
+  image: postgres:12.10-alpine
+  healthcheck:
+    test: ['CMD-SHELL', 'pg_isready -U postgres']
+    interval: 10s
+    timeout: 10s
+    retries: 5
+
 services:
   server:
-    container_name: proxypics_challenge_development_server
+    container_name: proxypics_challenge_server
     build:
       context: ./server
     restart: unless-stopped
@@ -23,19 +35,20 @@ services:
     depends_on:
       - server
   db:
+    <<: *db-base
     container_name: proxypics_challenge_development_db
-    image: postgres:12.10-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
+      <<: *db-env
       POSTGRES_DB: proxypics_challenge_development
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: proxypics123
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 10s
-      timeout: 10s
-      retries: 5
+
+  db_test:
+    <<: *db-base
+    container_name: proxypics_challenge_test_db
+    environment:
+      <<: *db-env
+      POSTGRES_DB: proxypics_challenge_test
 
 volumes:
   postgres_data:
