@@ -5,6 +5,8 @@
 # below each fixture, per the syntax in the comments below
 #
 Stan: {
-  email: stan_marsh@mail.com
+  email: stan_marsh@mail.com,
+  jti: asdasdasdasd,
+  type: Assignee
 }
 # column: value

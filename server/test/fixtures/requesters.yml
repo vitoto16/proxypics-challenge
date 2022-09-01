@@ -5,6 +5,8 @@
 # below each fixture, per the syntax in the comments below
 #
 Eric: {
-  email: eric_cartman@mail.com
+  email: eric_cartman@mail.com,
+  jti: asdasdasdas,
+  type: Requester
 }
 # column: value
