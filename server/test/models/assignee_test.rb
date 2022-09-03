@@ -4,7 +4,7 @@ class AssigneeTest < ActiveSupport::TestCase
   setup do
     @assignee = assignees(:Stan)
     @requester = requesters(:Eric)
-    @order = orders(:one)
+    @order = @requester.request_photos!("200 Lions St.")
   end
 
   test "should not be able to submit photos when not providing photos" do

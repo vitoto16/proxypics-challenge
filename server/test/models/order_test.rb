@@ -28,7 +28,7 @@ class OrderTest < ActiveSupport::TestCase
   end
 
   test "status should always be Pending or Completed" do
-    order = orders(:one)
+    order = @requester.request_photos!("200 Lions St.")
     
     order.status = "BLABLA"
     
