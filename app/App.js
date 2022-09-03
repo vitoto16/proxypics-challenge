@@ -8,19 +8,37 @@
 
 import React from 'react';
 import {createStore, applyMiddleware} from 'redux';
-import {Text, View} from 'react-native';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 import reducers from './src/reducers';
 
+// SCREENS
+import Login from './src/components/common/screens/Login';
+
+screens = {
+  Login: Login,
+};
+
 const store = createStore(reducers, applyMiddleware(thunk));
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <Provider store={store}>
-      <View>
-        <Text>Initial App!</Text>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerShown: false,
+          }}>
+          {Object.keys(screens).map(k => (
+            <Stack.Screen name={k} component={screens[k]} />
+          ))}
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 };
