@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   end
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      post "/request_photos", to: "orders#create"
+      resources :orders, only: %i[create] do
+        patch "submit_photos", as: "submit_photos"
+      end
     end
   end
 end
