@@ -9,4 +9,9 @@ Eric: {
   jti: asdasdasdas,
   type: Requester
 }
-# column: value
+
+Kenny: {
+  email: k_mccormick@mail.com,
+  jti: eeeeeeeeeee,
+  type: Requester
+}

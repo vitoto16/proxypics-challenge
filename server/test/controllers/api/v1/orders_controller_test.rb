@@ -12,12 +12,19 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     @order_params = { address: "blablablab" }
   end
 
-  def request_photos(params, headers: @requester_auth_headers)
+  def create_order(params, headers: @requester_auth_headers)
     post(
       api_v1_orders_url,
       params: {order: params},
       as: :json,
       headers: headers
+    )
+  end
+
+  def list_orders(user_type)
+    get(
+      api_v1_orders_url,
+      headers: user_type.is_a?(Requester) ? @requester_auth_headers : @assignee_auth_headers
     )
   end
 
@@ -43,7 +50,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   test "should not create order when user logged in is not requester" do
     assignee_auth_headers = Devise::JWT::TestHelpers.auth_headers(@headers, @assignee)
     
-    request_photos(@order_params, headers: assignee_auth_headers)
+    create_order(@order_params, headers: assignee_auth_headers)
     
     assert_response :unauthorized
     assert_equal("User type not authorized to perform this action", response.parsed_body["message"])
@@ -51,14 +58,14 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   
   test "should not create order when missing address" do
     assert_no_difference -> { Order.count } do
-      request_photos(@order_params.merge(address: nil))
+      create_order(@order_params.merge(address: nil))
     end
 
     assert_response :bad_request
     assert_equal(["Address can't be blank"], response.parsed_body["message"])
 
     assert_no_difference -> { Order.count } do
-      request_photos({})
+      create_order({})
     end
 
     assert_response :internal_server_error
@@ -67,7 +74,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create order succesfully when user is requester and address is present" do
     assert_difference -> { Order.count } do
-      request_photos(@order_params)
+      create_order(@order_params)
     end
 
     assert_response :ok
@@ -91,7 +98,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "should not accept submitted photos when order doesn't exist" do
-    request_photos(@order_params)
+    create_order(@order_params)
     order = response.parsed_body
     
     submit_photos(order["id"] + 999)
@@ -101,7 +108,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should return error when not providing photos" do
-    request_photos(@order_params)
+    create_order(@order_params)
     order = response.parsed_body
     
     submit_photos(order["id"])
@@ -116,7 +123,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should submit photos succesfully when providing at least one photo" do
-    request_photos(@order_params)
+    create_order(@order_params)
     order = response.parsed_body
 
     photo = fixture_file_upload(Rails.root.join('test', 'fixtures', 'files', 'photo_1.png'))
@@ -131,7 +138,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should submit photos succesfully when providing multiple photos" do
-    request_photos(@order_params)
+    create_order(@order_params)
     order = response.parsed_body
 
     photo_1 = fixture_file_upload(Rails.root.join('test', 'fixtures', 'files', 'photo_1.png'))
@@ -140,5 +147,35 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     submit_photos(order["id"], [photo_1, photo_2])
 
     assert_response :ok
+  end
+
+  test "should not list orders when user is not logged in" do
+    get api_v1_orders_url
+
+    assert_response :unauthorized
+    assert_equal("You need to sign in or sign up before continuing.", response.parsed_body["error"])
+  end
+
+  test "should list all orders when user logged in is assignee" do
+    create_order(@order_params)
+    create_order(@order_params)
+    create_order(@order_params)
+    list_orders(@assignee)
+
+    assert_response :ok
+    assert_equal(3, response.parsed_body.size)
+  end
+
+  test "should list only owned orders when user logged in is requester" do
+    create_order(@order_params)
+
+    requester_2 = requesters(:Kenny)
+    requester_2_auth_headers = Devise::JWT::TestHelpers.auth_headers(@headers, requester_2)
+    create_order(@order_params, headers: requester_2_auth_headers)
+    
+    list_orders(requester_2)
+
+    assert_response :ok
+    assert_equal(1, response.parsed_body.size)
   end
 end
