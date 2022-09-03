@@ -1,8 +1,9 @@
 import axios from 'axios';
 import baseURL from './url';
 
-const users = axios.create({
+const auth = axios.create({
   baseURL,
+  proxy: false,
 });
 
-export default users;
+export default auth;
