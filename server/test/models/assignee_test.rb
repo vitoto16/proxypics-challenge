@@ -12,7 +12,7 @@ class AssigneeTest < ActiveSupport::TestCase
       @assignee.submit_photos!(order_id=@order.id, photos=[])
     }
 
-    assert_equal("Please provide at least one photo", exception.message)
+    assert_equal("photos: Please provide at least one photo", exception.message)
   end
 
   test "should be able to submit photos when providing at least one photo" do
