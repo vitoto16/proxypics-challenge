@@ -12,6 +12,8 @@ class Order < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUS_OPTIONS, message: "'%{value}' is not a valid status type" }
   validates :address, presence: true
 
+  scope :from_requester, -> (requester_id) { where(requester_id: requester_id) }
+
   private
 
   def _set_initial_status

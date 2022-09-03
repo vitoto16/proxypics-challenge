@@ -19,6 +19,7 @@ services:
       context: ./server
     restart: unless-stopped
     entrypoint: /app/entrypoint.sh
+    env_file: ./server/env-example
     volumes:
       - ./server:/app
     ports:

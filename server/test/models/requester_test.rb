@@ -12,7 +12,7 @@ class RequesterTest < ActiveSupport::TestCase
   end
 
   test "should be able to create an order when providing an address" do
-    assert_difference('Order.count') do
+    assert_difference -> { Order.count } do
       @requester.request_photos!(address="250 Main St.")
     end
   end
