@@ -28,6 +28,8 @@ class ApplicationController < ActionController::API
                 return render json: {message: message}, status: :bad_request
             end
             return render json: {message: e.message}, status: :internal_server_error
+        rescue ActionController::ParameterMissing => e
+            respond_with nil, message: "Invalid parameters format"
         end
     end
 end
