@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :orders, only: %i[create] do
+      resources :orders, only: %i[index create] do
         patch "submit_photos", as: "submit_photos"
       end
     end
