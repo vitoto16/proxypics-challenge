@@ -67,7 +67,7 @@ class Api::V1::Users::RegistrationsControllerTest < ActionDispatch::IntegrationT
         assert_equal("Invalid user type value", response.parsed_body["status"]["message"])
     end
 
-    test "should create user when providing email, password and valid type" do
+    test "should create user when providing email and password and valid type" do
         assert_difference -> { User.count } do
             post(
                 user_registration_url,
