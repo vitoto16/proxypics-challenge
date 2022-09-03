@@ -3,6 +3,12 @@
 class Api::V1::Users::SessionsController < ::Devise::SessionsController
   respond_to :json
 
+  def create
+    super
+  rescue ActionController::ParameterMissing => e
+    respond_with nil, message: "Invalid parameters format"
+  end
+
   private
 
   def respond_with(resource, _opts = {})

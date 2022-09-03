@@ -8,6 +8,8 @@ class Api::V1::Users::RegistrationsController < ::Devise::RegistrationsControlle
     super
   rescue ActiveRecord::SubclassNotFound => e
     respond_with resource, message: "Invalid user type value"
+  rescue ActionController::ParameterMissing => e
+    respond_with nil, message: "Invalid parameters format"
   end
 
   protected
