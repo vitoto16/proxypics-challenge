@@ -1,4 +1,4 @@
-FROM ruby:3.1.2 AS drkiq-development
+FROM ruby:3.1.1 AS drkiq-development
 
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential postgresql-client
 
