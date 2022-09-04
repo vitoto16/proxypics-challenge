@@ -12,7 +12,7 @@ const Header = props => {
   const handlelogout = async () => {
     try {
       await logout();
-      navigation.navigate('Login');
+      navigation.navigate('Login', {notice: 'Logged out successfully'});
     } catch (e) {
       console.log(e.response.data.status.message);
     }
