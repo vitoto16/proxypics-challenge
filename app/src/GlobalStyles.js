@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 export const Color = {
-  black: 'rgba(0, 0, 0, 0.85);',
-
   gray: '#e0e0e0',
 
   primary: '#0891b2',
@@ -11,24 +9,21 @@ export const Color = {
   error: '#dc2626',
 };
 
+const baseText = {
+  fontSize: 16,
+  fontWeight: '400',
+  fontFamily: 'Avenir',
+};
+
 const globalStyles = StyleSheet.create({
-  baseText: {
-    color: Color.black,
-    fontSize: 16,
-    fontWeight: '400',
-    fontFamily: 'Avenir',
-  },
+  baseText,
+
   boldText: {
-    color: Color.black,
-    fontSize: 16,
+    ...baseText,
     fontWeight: '800',
-    fontFamily: 'Avenir',
   },
   underlinedText: {
-    color: Color.black,
-    fontSize: 16,
-    fontWeight: '400',
-    fontFamily: 'Avenir',
+    ...baseText,
     textDecorationLine: 'underline',
   },
 });
