@@ -25,7 +25,7 @@ class Api::V1::Users::RegistrationsController < ::Devise::RegistrationsControlle
       if resource.persisted?
         render json: {
           status: {code: 200, message: 'Signed up sucessfully.'},
-          data: resource
+          data: UserSerializer.new(resource).as_json
         }
       else
         render json: {
