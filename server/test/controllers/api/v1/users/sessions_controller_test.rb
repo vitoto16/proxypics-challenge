@@ -50,7 +50,7 @@ class Api::V1::Users::SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal("Couldn't find an active session.", response.parsed_body["status"]["message"])
     end
 
-    test "should log out succesfully when providing a valid token" do
+    test "should log out successfully when providing a valid token" do
         headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
         auth_headers = Devise::JWT::TestHelpers.auth_headers(headers, @user)
 

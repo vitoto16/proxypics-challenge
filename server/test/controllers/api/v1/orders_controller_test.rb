@@ -72,7 +72,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal("param is missing or the value is empty: order", response.parsed_body["message"])
   end
 
-  test "should create order succesfully when user is requester and address is present" do
+  test "should create order successfully when user is requester and address is present" do
     assert_difference -> { Order.count } do
       create_order(@order_params)
     end
@@ -122,7 +122,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal("Please provide at least one photo", response.parsed_body["message"])
   end
 
-  test "should submit photos succesfully when providing at least one photo" do
+  test "should submit photos successfully when providing at least one photo" do
     create_order(@order_params)
     order = response.parsed_body
 
@@ -137,7 +137,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal(@assignee.id, response.parsed_body["assignee_id"])
   end
 
-  test "should submit photos succesfully when providing multiple photos" do
+  test "should submit photos successfully when providing multiple photos" do
     create_order(@order_params)
     order = response.parsed_body
 
