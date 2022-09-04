@@ -44,7 +44,7 @@ const Registration = props => {
       validateForm();
       if (!Object.keys(errors).length) {
         await register({email, password, type});
-        navigation.navigate('Login');
+        navigation.replace('Login');
       }
     } catch (e) {
       setErrors({...errors, general: e.response.data.status.message});
@@ -53,7 +53,7 @@ const Registration = props => {
 
   useEffect(() => {
     if (authToken) {
-      navigation.navigate('Login');
+      navigation.replace('Login');
     }
   }, []);
 

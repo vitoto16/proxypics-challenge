@@ -14,26 +14,30 @@ const Login = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(!!Object.keys(user).length);
+
+  const handleLoggedIn = () => {
+    user.type === 'Requester'
+      ? navigation.navigate('RequesterDashboard')
+      : user.type === 'Assignee'
+      ? navigation.navigate('AssigneeDashboard')
+      : setError(`User not logged in`);
+  };
 
   const handleLogin = async () => {
-    setError('');
     try {
       await login({email, password});
-      navigation.navigate('Dashboard');
+      setIsLoggedIn(true);
     } catch (e) {
       setError(e.response.data.error);
     }
   };
 
   useEffect(() => {
-    if (Object.keys(user).length) {
-      user.type === 'Requester'
-        ? navigation.navigate('RequesterDashboard')
-        : user.type === 'Assignee'
-        ? navigation.navigate('AssigneeDashboard')
-        : setError(`Invalid user type value`);
+    if (isLoggedIn) {
+      handleLoggedIn();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <>
