@@ -20,7 +20,10 @@ export const register = user => async dispatch => {
   const response = await auth.post('/signup', {user}, config);
   dispatch({
     type: REGISTER,
-    payload: response.headers['authorization'],
+    payload: {
+      authToken: response.headers['authorization'],
+      user: response.data.data,
+    },
   });
 };
 
@@ -28,7 +31,10 @@ export const login = user => async dispatch => {
   const response = await auth.post('/login', {user}, config);
   dispatch({
     type: LOGIN,
-    payload: response.headers['authorization'],
+    payload: {
+      authToken: response.headers['authorization'],
+      user: response.data.data,
+    },
   });
 };
 
