@@ -16,13 +16,17 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import reducers from './src/reducers';
 
-// SCREENS
+// COMMON SCREENS
 import Login from './src/common/screens/Login';
 import Registration from './src/common/screens/Registration';
+
+// REQUESTER SCREENS
+import RequesterDashboard from './src/requester/screens/RequesterDashboard';
 
 screens = {
   Login,
   Registration,
+  RequesterDashboard,
 };
 
 const store = createStore(reducers, applyMiddleware(thunk));

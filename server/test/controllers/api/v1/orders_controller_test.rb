@@ -80,7 +80,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal(@order_params[:address], response.parsed_body["address"])
     assert_equal(Order::STATUS_PENDING, response.parsed_body["status"])
-    assert_equal(@requester.id, response.parsed_body["requester_id"])
+    assert_equal(@requester.id, response.parsed_body["requester"]["id"])
   end
 
   test "should not accept submitted photos when not logged in" do
@@ -133,8 +133,8 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal(@order_params[:address], response.parsed_body["address"])
     assert_equal(Order::STATUS_COMPLETED, response.parsed_body["status"])
-    assert_equal(@requester.id, response.parsed_body["requester_id"])
-    assert_equal(@assignee.id, response.parsed_body["assignee_id"])
+    assert_equal(@requester.id, response.parsed_body["requester"]["id"])
+    assert_equal(@assignee.id, response.parsed_body["assignee"]["id"])
   end
 
   test "should submit photos successfully when providing multiple photos" do
