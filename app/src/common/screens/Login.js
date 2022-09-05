@@ -18,9 +18,9 @@ const Login = props => {
 
   const handleLoggedIn = () => {
     user.type === 'Requester'
-      ? navigation.navigate('RequesterDashboard')
+      ? navigation.replace('RequesterDashboard')
       : user.type === 'Assignee'
-      ? navigation.navigate('AssigneeDashboard')
+      ? navigation.replace('AssigneeDashboard')
       : setError(`User not logged in`);
   };
 
