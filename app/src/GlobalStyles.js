@@ -5,6 +5,8 @@ export const Color = {
 
   primary: '#0891b2',
   primaryDark: '#155e75',
+  light: '#d6d3d1',
+  medium: '#a8a29e',
 
   error: '#dc2626',
 };
@@ -26,6 +28,8 @@ const globalStyles = StyleSheet.create({
     ...baseText,
     textDecorationLine: 'underline',
   },
+
+  imageContain: {resizeMode: 'contain', height: '100%', width: '100%'},
 });
 
 export default globalStyles;
