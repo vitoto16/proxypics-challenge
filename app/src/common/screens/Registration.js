@@ -37,17 +37,18 @@ const Registration = props => {
       newErrors.passwordConfirmation = "Passwords don't match";
     }
     setErrors(newErrors);
+    return newErrors;
   };
 
   const handleSubmit = async () => {
     try {
-      validateForm();
-      if (!Object.keys(errors).length) {
+      const newErrors = validateForm();
+      if (!Object.keys(newErrors).length) {
         await register({email, password, type});
         navigation.replace('Login');
       }
     } catch (e) {
-      setErrors({...errors, general: e.response.data.status.message});
+      setErrors({...newErrors, general: e.response.data.status.message});
     }
   };
 
