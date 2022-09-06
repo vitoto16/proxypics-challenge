@@ -11,7 +11,7 @@ import TextInput from '../../common/components/TextInput';
 import Modal from '../../common/components/Modal';
 
 const RequesterDashboard = props => {
-  const {createOrder, fetchOrders, orders, user} = props;
+  const {createOrder, fetchOrders, orders} = props;
   const toast = useToast();
   const [modalVisible, setModalVisible] = useState(false);
   const [newOrderAddress, setNewOrderAddress] = useState('');
