@@ -9,15 +9,13 @@ import {
   SUBMIT_PHOTOS,
 } from './types';
 
-const config = {
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
 };
 
 export const register = user => async dispatch => {
-  const response = await auth.post('/signup', {user}, config);
+  const response = await auth.post('/signup', {user}, {headers: headers});
   dispatch({
     type: REGISTER,
     payload: {
@@ -28,7 +26,7 @@ export const register = user => async dispatch => {
 };
 
 export const login = user => async dispatch => {
-  const response = await auth.post('/login', {user}, config);
+  const response = await auth.post('/login', {user}, {headers: headers});
   dispatch({
     type: LOGIN,
     payload: {
@@ -41,7 +39,7 @@ export const login = user => async dispatch => {
 export const logout = () => async (dispatch, getState) => {
   const {authToken} = getState().auth;
   await auth.delete('/logout', {
-    headers: {...config, Authorization: authToken},
+    headers: {...headers, Authorization: authToken},
   });
   dispatch({
     type: LOGOUT,
@@ -53,7 +51,7 @@ export const createOrder = order => async (dispatch, getState) => {
   const response = await orders.post(
     '',
     {order},
-    {headers: {...config, Authorization: authToken}},
+    {headers: {...headers, Authorization: authToken}},
   );
   dispatch({
     type: CREATE_ORDER,
@@ -64,7 +62,7 @@ export const createOrder = order => async (dispatch, getState) => {
 export const fetchOrders = () => async (dispatch, getState) => {
   const {authToken} = getState().auth;
   const response = await orders.get('', {
-    headers: {...config, Authorization: authToken},
+    headers: {...headers, Authorization: authToken},
   });
   dispatch({
     type: FETCH_ORDERS,
@@ -74,10 +72,20 @@ export const fetchOrders = () => async (dispatch, getState) => {
 
 export const submitPhotos = (id, photos) => async (dispatch, getState) => {
   const {authToken} = getState().auth;
-  const response = await orders.patch(`/${id}/submit_photos`, photos, {
+  const formData = new FormData();
+  photos.forEach((photo, i) => {
+    formData.append('photos[]', {
+      uri: photo,
+      type: 'image/jpg',
+      filename: `Order_${id}_Photo_${i}.jpg`,
+      name: `Order_${id}_Photo_${i}.jpg`,
+    });
+  });
+  formData.append('Content-Type', 'image/jpg');
+  const response = await orders.patch(`/${id}/submit_photos`, formData, {
     headers: {
-      ...config,
-      Authorization: `Bearer ${authToken}`,
+      ...headers,
+      Authorization: authToken,
       'Content-Type': 'multipart/form-data',
     },
   });
